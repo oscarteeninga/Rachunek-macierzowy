@@ -1,0 +1,116 @@
+oscarteeninga@MacBook-Pro-16-Oscar Lab1 % make all
+gcc lab1.c
+./a.out 10
+===========10===========
+-------IJK-------
+Time: 0.00 ms
+Difference: 0.00
+
+-------IKJ-------
+Time: 0.00 ms
+Difference: 0.00
+
+-------JIK-------
+Time: 0.00 ms
+Difference: 0.00
+
+-------JKI-------
+Time: 0.00 ms
+Difference: 0.00
+
+-------KIJ-------
+Time: 0.00 ms
+Difference: 0.00
+
+-------KJI-------
+Time: 0.00 ms
+Difference: 0.00
+
+========================
+
+
+./a.out 100
+===========100===========
+-------IJK-------
+Time: 3.17 ms
+Difference: 0.00
+
+-------IKJ-------
+Time: 2.92 ms
+Difference: 0.00
+
+-------JIK-------
+Time: 3.31 ms
+Difference: 0.00
+
+-------JKI-------
+Time: 2.94 ms
+Difference: 0.00
+
+-------KIJ-------
+Time: 3.00 ms
+Difference: 0.00
+
+-------KJI-------
+Time: 3.25 ms
+Difference: 0.00
+
+========================
+
+
+./a.out 1000
+===========1000===========
+-------IJK-------
+Time: 6462.94 ms
+Difference: 0.00
+
+-------IKJ-------
+Time: 2806.01 ms
+Difference: 0.00
+
+-------JIK-------
+Time: 5861.48 ms
+Difference: 0.00
+
+-------JKI-------
+Time: 9160.53 ms
+Difference: 0.00
+
+-------KIJ-------
+Time: 2622.25 ms
+Difference: 0.00
+
+-------KJI-------
+Time: 8090.12 ms
+Difference: 0.00
+
+========================
+
+
+./a.out 1500
+===========1500===========
+-------IJK-------
+Time: 28196.15 ms
+Difference: 0.00
+
+-------IKJ-------
+Time: 9128.60 ms
+Difference: 0.00
+
+-------JIK-------
+Time: 24243.39 ms
+Difference: 0.00
+
+-------JKI-------
+Time: 38040.38 ms
+Difference: 0.00
+
+-------KIJ-------
+Time: 9232.24 ms
+Difference: 0.00
+
+-------KJI-------
+Time: 33595.14 ms
+Difference: 0.00
+
+========================
