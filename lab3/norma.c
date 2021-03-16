@@ -63,6 +63,17 @@ double **copy_matrix(double **m, int n) {
     return new;
 }
 
+double **read_matrix(char *name, int n) {
+    double **m = matrix(n);
+    FILE *file = fopen(name, "r");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            fscanf(file, "%lf", &m[i][j]);
+        }
+    }
+    return m;
+}
+
 void vector_mul_numeric(double *v, double a, int n) {
     for (int i = 0; i < n; i++) {
         v[i] *= a;
@@ -171,34 +182,62 @@ double norma_matrix(double **m, int n, double p) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 3) {
+    if (argc == 3) {
+        int n = atoi(argv[1]);
+        double p = atof(argv[2]);
+
+        srand(time(NULL));
+
+        double **m = matrix_rand(n);
+        double **inv_m = copy_matrix(m, n);
+        printf("===Matrix M===\n");
+        print_matrix(m, n);
+
+        printf("Norm: %f\n\n", norma_matrix(m, n, p));
+
+        if (n == 2 || n == 3) {
+            invert_matrix(inv_m, n);
+            printf("===Inverted M===\n");
+            print_matrix(inv_m, n);
+
+            printf("Norm: %f\n\n", norma_matrix(inv_m, n, p));
+
+            printf("Check M*M^(-1):\n");
+            double **check = matrix(n);
+            matrix_mul_matrix(m, inv_m, check, n);
+            print_matrix(check, n);
+        }
+        return 0;
+    } else if (argc == 4) {
+        int n = atoi(argv[1]);
+        double p = atof(argv[2]);
+
+        printf("!!! Macierz odczytana z pliku %s !!!\n\n", argv[3]);
+
+        double **m = read_matrix(argv[3], n);
+        double **inv_m = copy_matrix(m, n);
+        printf("===Matrix M===\n");
+        print_matrix(m, n);
+
+        printf("Norm: %f\n\n", norma_matrix(m, n, p));
+
+        if (n == 2 || n == 3) {
+            invert_matrix(inv_m, n);
+            printf("===Inverted M===\n");
+            print_matrix(inv_m, n);
+
+            printf("Norm: %f\n\n", norma_matrix(inv_m, n, p));
+
+            printf("Check M*M^(-1):\n");
+            double **check = matrix(n);
+            matrix_mul_matrix(m, inv_m, check, n);
+            print_matrix(check, n);
+        }
+    } else {
         printf("Require size and p arguments\n");
         return 1;
     }
-    int n = atoi(argv[1]);
-    double p = atof(argv[2]);
 
-    srand(time(NULL));
-
-    double **m = matrix_rand(n);
-    double **inv_m = copy_matrix(m, n);
-    printf("===Matrix M===\n");
-    print_matrix(m, n);
-
-    printf("Norm: %f\n\n", norma_matrix(m, n, p));
-
-    if (n == 2 || n == 3) {
-        invert_matrix(inv_m, n);
-        printf("===Inverted M===\n");
-        print_matrix(inv_m, n);
-
-        printf("Norm: %f\n\n", norma_matrix(inv_m, n, p));
-
-        printf("Check M*M^(-1):\n");
-        double **check = matrix(n);
-        matrix_mul_matrix(m, inv_m, check, n);
-        print_matrix(check, n);
-    }
 
     return 0;
 }

@@ -48,6 +48,17 @@ double **copy_matrix(double **m, int n) {
     return new;
 }
 
+double **read_matrix(char *name, int n) {
+    double **m = matrix(n);
+    FILE *file = fopen(name, "r");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            fscanf(file, "%lf", &m[i][j]);
+        }
+    }
+    return m;
+}
+
 void gauss_ones(double **u, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = n-1; j >= i; j--) {
@@ -132,37 +143,67 @@ void lu(double **a, double **l, double **u, int n) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
+    if (argc == 2) {
+        int n = atoi(argv[1]);
+
+        srand(time(NULL));
+        double **u = matrix_rand(n);
+
+        print(u, n);
+        printf("Algorytm eliminacji Gaussa bez pivotingu - jedynki na przekątnej\n");
+        double **a = copy_matrix(u, n);
+        gauss_ones(a, n);
+        print(a, n);
+        printf("Algorytm eliminacji Gaussa bez pivotingu\n");
+        double **b = copy_matrix(u, n);
+        gauss(b, n);
+        print(b, n);
+        printf("Algorytm eliminacji Gaussa z pivotigniem\n");
+        double **c = copy_matrix(u, n);
+        gauss_pivot(c, n);
+        print(c, n);
+        printf("Algorytm LU faktoryzacji bez pivotingu\n");
+        double **d = copy_matrix(u, n);
+        double **l = matrix(n);
+        double **u1 = matrix(n);
+        lu(d, l, u1, n);
+        printf("L:\n");
+        print(l, n);
+        printf("U:\n");
+        print(u1, n);
+    } else if (argc == 3) {
+        int n = atoi(argv[1]);
+
+        printf("!!! Macierz odczytana z pliku %s !!!\n\n", argv[2]);
+        double **u = read_matrix(argv[2], n);
+
+        print(u, n);
+        printf("Algorytm eliminacji Gaussa bez pivotingu - jedynki na przekątnej\n");
+        double **a = copy_matrix(u, n);
+        gauss_ones(a, n);
+        print(a, n);
+        printf("Algorytm eliminacji Gaussa bez pivotingu\n");
+        double **b = copy_matrix(u, n);
+        gauss(b, n);
+        print(b, n);
+        printf("Algorytm eliminacji Gaussa z pivotigniem\n");
+        double **c = copy_matrix(u, n);
+        gauss_pivot(c, n);
+        print(c, n);
+        printf("Algorytm LU faktoryzacji bez pivotingu\n");
+        double **d = copy_matrix(u, n);
+        double **l = matrix(n);
+        double **u1 = matrix(n);
+        lu(d, l, u1, n);
+        printf("L:\n");
+        print(l, n);
+        printf("U:\n");
+        print(u1, n);
+    } else {
         printf("Require size argument\n");
         return 1;
     }
-    int n = atoi(argv[1]);
 
-    srand(time(NULL));
-    double **u = matrix_rand(n);
-
-    print(u, n);
-    printf("Algorytm eliminacji Gaussa bez pivotingu - jedynki na przekątnej\n");
-    double **a = copy_matrix(u, n);
-    gauss_ones(a, n);
-    print(a, n);
-    printf("Algorytm eliminacji Gaussa bez pivotingu\n");
-    double **b = copy_matrix(u, n);
-    gauss(b, n);
-    print(b, n);
-    printf("Algorytm eliminacji Gaussa z pivotigniem\n");
-    double **c = copy_matrix(u, n);
-    gauss_pivot(c, n);
-    print(c, n);
-    printf("Algorytm LU faktoryzacji bez pivotingu\n");
-    double **d = copy_matrix(u, n);
-    double **l = matrix(n);
-    double **u1 = matrix(n);
-    lu(d, l, u1, n);
-    printf("L:\n");
-    print(l, n);
-    printf("U:\n");
-    print(u1, n);
 
     return 0;
 }
