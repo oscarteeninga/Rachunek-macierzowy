@@ -171,6 +171,16 @@ int main(int argc, char *argv[]) {
         print(l, n);
         printf("U:\n");
         print(u1, n);
+
+        free(u);
+        free(a);
+        free(b);
+        free(c);
+        free(d);
+        free(l);
+        free(u1);
+        return 0;
+
     } else if (argc == 3) {
         int n = atoi(argv[1]);
 
@@ -199,11 +209,18 @@ int main(int argc, char *argv[]) {
         print(l, n);
         printf("U:\n");
         print(u1, n);
+
+        free(u);
+        free(a);
+        free(b);
+        free(c);
+        free(d);
+        free(l);
+        free(u1);
+        return 0;
+        
     } else {
         printf("Require size argument\n");
         return 1;
     }
-
-
-    return 0;
 }

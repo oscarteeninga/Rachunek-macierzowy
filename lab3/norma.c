@@ -207,6 +207,9 @@ int main(int argc, char *argv[]) {
             matrix_mul_matrix(m, inv_m, check, n);
             print_matrix(check, n);
         }
+
+        free(m);
+        free(inv_m);
         return 0;
     } else if (argc == 4) {
         int n = atoi(argv[1]);
@@ -233,11 +236,12 @@ int main(int argc, char *argv[]) {
             matrix_mul_matrix(m, inv_m, check, n);
             print_matrix(check, n);
         }
+
+        free(m);
+        free(inv_m);
+        return 0;
     } else {
         printf("Require size and p arguments\n");
         return 1;
     }
-
-
-    return 0;
 }

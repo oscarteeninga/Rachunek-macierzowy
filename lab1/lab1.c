@@ -7,8 +7,6 @@
 
 double **reference;
 
-
-
 // zwraca roznice pomiedzy dwiema macierzami
 double check(double **a, double **b, int n) {
     double diff = 0.0;
@@ -224,5 +222,8 @@ int main(int argc, char *argv[]) {
     kji(a, b, n);
     printf("========================\n\n\n");
 
+    free(a);
+    free(b);
+    free(reference);
     return 0;
 }
