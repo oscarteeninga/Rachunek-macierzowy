@@ -120,27 +120,33 @@ void gauss_pivot(double **u, int n) {
     }
 }
 
-void lu(double **a, double **l, double **u, int n) {
-    for(int j = 0; j < n; j++) {
-        for(int i = 0; i < n; i++) {
-            if(i <= j) {
-                u[i][j] = a[i][j];
-                for (int k = 0; k < i-1; k++) {
-                    u[i][j] -= l[i][k]*u[k][j];
-                }
-                if (i == j) l[i][j] = 1;
-                else l[i][j] = 0;
-            } else {
-                l[i][j] = a[i][j];
-                for(int k = 0; k <= j - 1; k++) {
-                    l[i][j] -= l[i][k] * u[k][j];
-                }
-                l[i][j] /= u[j][j];
-                u[i][j] = 0;
+void lu(double **u, double **l, int n) {
+    for (int i = 0; i < n; i++) {
+        l[i][i] = 1;
+    }
+
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            double m = -u[j][i] / u[i][i];
+            l[j][i] = -m;
+            for (int k = i; k < n; k++) {
+                u[j][k] += m * u[i][k];
             }
         }
     }
 }
+
+void matrix_mul_matrix(double **a, double **b, double **c, int n) {
+    register int i, j, k;
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            for (k = 0; k < n; k++) {
+                c[i][j] += a[i][k]*b[k][j];
+            }
+        }
+    }
+}
+
 
 int main(int argc, char *argv[]) {
     if (argc == 2) {
@@ -166,7 +172,7 @@ int main(int argc, char *argv[]) {
         double **d = copy_matrix(u, n);
         double **l = matrix(n);
         double **u1 = matrix(n);
-        lu(d, l, u1, n);
+        lu(d, l, n);
         printf("L:\n");
         print(l, n);
         printf("U:\n");
@@ -203,12 +209,16 @@ int main(int argc, char *argv[]) {
         printf("Algorytm LU faktoryzacji bez pivotingu\n");
         double **d = copy_matrix(u, n);
         double **l = matrix(n);
-        double **u1 = matrix(n);
-        lu(d, l, u1, n);
+        lu(d, l, n);
         printf("L:\n");
         print(l, n);
         printf("U:\n");
-        print(u1, n);
+        print(d, n);
+
+        double **g = matrix(n);
+        printf("LU:\n");
+        matrix_mul_matrix(l, d, g, n);
+        print(g, n);
 
         free(u);
         free(a);
@@ -216,7 +226,7 @@ int main(int argc, char *argv[]) {
         free(c);
         free(d);
         free(l);
-        free(u1);
+        free(g);
         return 0;
         
     } else {
