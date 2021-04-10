@@ -23,7 +23,7 @@ void print_matrix(double **a, int n) {
 double *vector(int n) {
     double *v = calloc(n, sizeof(double));
     for (int i = 0; i < n; i++) {
-        v[i] = 100.0;
+        v[i] = 1.0;
     }
     return v;
 }
@@ -94,9 +94,17 @@ double norm_vector(double *v, int n) {
 double error_l(double *w, double *z, double l, int n) {
     double *r = vector(n);
     for (int i = 0; i < n; i++) {
-        r[i] = w[i] - l * z[i];
+        if (w[i]*z[i] > 0) {
+            r[i] = w[i] - l * z[i];
+        } else {
+            r[i] = w[i] + l * z[i];
+        }
     }
-    return norm_vector(r, n);
+    printf("Wektor bledu e:");
+    print_vector(r, n);
+    double err = norm_vector(r, n);
+    free(r);
+    return err;
 }
 
 double z_vector(double **a, double *z, int n) {
@@ -104,17 +112,26 @@ double z_vector(double **a, double *z, int n) {
     double l;
     double err = 2*eps;
     for (int i = 1; ;i++) {
+
+        printf("\n-------Iteracja %d-------\n", i);
+        printf("Wektor z:");
+        print_vector(z, n);
+        
+        printf("Wektor w:");
         matrix_mul_vector(a, z, w, n);
+        print_vector(w, n);
+
         l = norm_vector(w, n);
+        printf("Wartosc wlasna: %f\n", l);
+
         err = error_l(w, z, l, n);
+        printf("Błąd:\t%f\n", err);
 
         vector_div_numeric(w, l, z, n);
-        if (err < eps || i > 10) {
-            printf("\n-------Iteracja %d-------\n", i);
-            printf("Wartosc wlasna: %f\n", l);
-            printf("Wektor z:");
+
+        if (err < eps || i > 4) {
+            printf("!!!!Ostetecznie z!!!!:");
             print_vector(z, n);
-            printf("Błąd:\t%f\n", err);
             break;
         }
     }
@@ -132,21 +149,25 @@ void e_matrix(double **a, double *z, double **e, int n) {
 
 void svd(double **a, int n) {
     double *z_prev = vector(n);
-    double lambda = z_vector(a, z_prev, n);
-    for (int i = 0; i < n; i++) {
-        printf("\n\n=======SIGMA %d=======\n", i+1);
+    double *sigmas = vector(n);
+    sigmas[0] = z_vector(a, z_prev, n);
+    for (int i = 1; i < n; i++) {
+        printf("\n\n=======SIGMA %d=======\n", i);
         printf("Vector z_prev:");
         print_vector(z_prev, n);
         double **e = matrix(n);
-        double *z = vector(n);
         e_matrix(a, z_prev, e, n);
         printf("Macierz E:\n");
         print_matrix(e, n);
-        lambda = z_vector(e, z, n);
+        double *z = vector(n);
+        sigmas[i] = z_vector(e, z, n);
         for (int i = 0; i < n; i++) {
             z_prev[i] = z[i];
         }
+        free(e);
     }
+    printf("\n\nWartosci osobliwe:");
+    print_vector(sigmas, n);
 }
 
 int main(int argc, char *argv[]) {
