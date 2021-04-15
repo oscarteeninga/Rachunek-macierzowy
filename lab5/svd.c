@@ -138,12 +138,14 @@ double z_vector(double **a, double *z, int n) {
     return l;
 }
 
-void e_matrix(double **a, double *z, double **e, int n) {
-    double *az = vector(n);
-    matrix_mul_vector(a, z, az, n);
-    double **azazt = matrix(n);
-    vector_mul_vector(az, az, azazt, n);
-    matrix_min_matrix(a, azazt, e, n);
+void e_matrix(double **a, double *z, double **e, double l, int n) {
+    double **lzzt = matrix(n);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            lzzt[i][j] = l*l*z[j]*z[i];
+        }
+    }
+    matrix_min_matrix(a, lzzt, e, n);
 }
 
 
@@ -156,7 +158,7 @@ void svd(double **a, int n) {
         printf("Vector z_prev:");
         print_vector(z_prev, n);
         double **e = matrix(n);
-        e_matrix(a, z_prev, e, n);
+        e_matrix(a, z_prev, e, sigmas[i-1], n);
         printf("Macierz E:\n");
         print_matrix(e, n);
         double *z = vector(n);
@@ -183,3 +185,5 @@ int main(int argc, char *argv[]) {
     svd(a, n);
     return 0;
 }
+
+// E = A − (lz)(lz)T
